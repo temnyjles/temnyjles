@@ -8,9 +8,8 @@ OUTPUT = Path("dist")
 
 # SSI include directive.
 include_re = re.compile(
-    r'<!--#include\s+file="([^"]+)"\s+\*-->'
+    r'<!--#include\s+file="([^"]+)"\s*-->'
 )
-
 
 def resolve_include(path):
     """Find an include, supporting .html -> .shtml fallback."""
