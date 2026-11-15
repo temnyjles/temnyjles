@@ -254,5 +254,32 @@ for path in SOURCE.rglob("*"):
     encoding="utf-8"
 )
 
+# ============================================================
+# LAST WEBSITE CHANGE
+# ============================================================
+
+commit = os.environ.get("CF_PAGES_COMMIT_SHA", "")
+
+if not commit:
+    commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"],
+        text=True
+    ).strip()
+
+git_info = subprocess.check_output(
+    ["git", "show", "-s", "--format=%cI%n%s", commit],
+    text=True
+).strip().split("\n", 1)
+
+(OUTPUT / "last-change.txt").write_text(
+    f"Last change: {git_info[0]}\n"
+    f"Commit message: {git_info[1] if len(git_info) > 1 else ''}\n"
+    f"Commit: {commit}\n"
+    f"Branch: {os.environ.get('CF_PAGES_BRANCH', 'unknown')}\n",
+    encoding="utf-8"
+)
+
+print(f"Website successfully built in {OUTPUT}/")
+
 
 print(f"Website successfully built in {OUTPUT}/")
