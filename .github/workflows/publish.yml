@@ -1,0 +1,174 @@
+
+name: Build and publish website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14.10'
+
+      - name: Build website
+        id: build
+        run: |
+          set -o pipefail
+          python scripts/build.py 2>&1 | tee build.log
+
+      - name: Verify links
+        id: verify
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python scripts/verify_links.py 2>&1 | tee verify_links.log
+
+      - name: Extract link verification summary
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f verify_links.log ]; then
+            awk '
+              /^SUMMARY$/ { inside=1; next }
+              inside && /^=+$/ {
+                if (printed) exit
+                next
+              }
+              inside {
+                print
+                printed=1
+              }
+            ' verify_links.log > verify_summary.txt
+          fi
+
+          if [ ! -s verify_summary.txt ]; then
+            echo "No summary was produced by the link checker." \
+              > verify_summary.txt
+          fi
+
+      - name: Configure GitHub Pages
+        if: steps.build.outcome == 'success'
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+
+      - name: Publish website
+        id: deployment
+        if: steps.build.outcome == 'success'
+        uses: actions/deploy-pages@v5.0.1
+
+      - name: Prepare email report
+        if: ${{ !cancelled() }}
+        env:
+          BUILD_RESULT: ${{ steps.build.outcome }}
+          VERIFY_RESULT: ${{ steps.verify.outcome }}
+          DEPLOY_RESULT: ${{ steps.deployment.outcome }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          COMMIT_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          touch build.log verify_links.log
+
+          if [ "$BUILD_RESULT" = "success" ]; then
+            BUILD_STATUS="SUCCESS"
+          else
+            BUILD_STATUS="FAILED"
+          fi
+
+          if [ "$VERIFY_RESULT" = "skipped" ]; then
+            LINK_STATUS="NOT RUN (build did not succeed)"
+          elif grep -q "No summary was produced" verify_summary.txt; then
+            LINK_STATUS="NO SUMMARY PRODUCED (check full report)"
+          else
+            LINK_STATUS="REPORT GENERATED (exit code: $VERIFY_RESULT)"
+          fi
+
+          if [ "$BUILD_RESULT" != "success" ]; then
+            PUBLISH_STATUS="NOT PUBLISHED (build failed)"
+          elif [ "$DEPLOY_RESULT" = "success" ]; then
+            PUBLISH_STATUS="SUCCESS"
+          else
+            PUBLISH_STATUS="NOT SUCCESSFUL"
+          fi
+
+          {
+            echo "WEBSITE PUBLICATION REPORT"
+            echo "=========================="
+            echo ""
+            echo "Repository: $GITHUB_REPOSITORY"
+            echo "Branch: $BRANCH"
+            echo ""
+            echo "BUILD: $BUILD_STATUS"
+            echo "LINK VERIFICATION: $LINK_STATUS"
+            echo "PUBLICATION: $PUBLISH_STATUS"
+            echo ""
+
+            echo "COMMIT INFORMATION"
+            echo "=================="
+            git show -s --format='Short revision: %h%nFull revision: %H%nAuthor date/time: %aI%nCommitter date/time: %cI%nCommit subject: %s%n%nFull commit message:%n%b' "$COMMIT_SHA"
+            echo ""
+            echo "REPORT GENERATED (UTC): $(date -u '+%Y-%m-%d %H:%M:%S')"
+            echo ""
+            echo "LINK VERIFICATION SUMMARY"
+            echo "========================="
+            cat verify_summary.txt
+            echo ""
+            echo "The complete link verification report is attached."
+            echo ""
+            echo "BUILD OUTPUT"
+            echo "============"
+            cat build.log
+            echo ""
+            if [ -n "$PAGE_URL" ]; then
+              echo "PUBLISHED WEBSITE: $PAGE_URL"
+            fi
+            echo ""
+            echo "FULL TECHNICAL REPORT:"
+            echo "$RUN_URL"
+          } > report.txt
+
+      - name: Send email report
+        if: ${{ !cancelled() }}
+        uses: dawidd6/action-send-mail@v23
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: 587
+          secure: false
+          require_tls: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          from: ${{ secrets.MAIL_FROM }}
+          to: ${{ secrets.MAIL_TO }}
+          subject: >-
+            Website: ${{ steps.build.outcome == 'success' && steps.deployment.outcome == 'success' && 'PUBLISHED' || 'PUBLICATION PROBLEM' }}
+            - ${{ github.repository }}
+          body: file://report.txt
+          attachments: verify_links.log,build.log
