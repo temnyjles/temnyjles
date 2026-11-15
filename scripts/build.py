@@ -102,13 +102,13 @@ for path in SOURCE.rglob("*"):
 
     if path.suffix.lower() in (".html", ".shtml"):
 
-        target = OUTPUT / relative.with_suffix(".html")
+        target = OUTPUT / relative #.with_suffix(".html")
         target.parent.mkdir(parents=True, exist_ok=True)
 
         content = process(path)
 
         # Normalize internal links after SSI expansion.
-        content = normalize_links(content)
+        # content = normalize_links(content)
 
         target.write_text(content, encoding="utf-8")
 
