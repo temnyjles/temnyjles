@@ -1,216 +1,510 @@
 
 #!/usr/bin/env python3
 """
-Compare two websites after migration.
+Sequential website migration crawler.
 
-Features:
-- Old website: Windows-1251, legacy .shtml URLs
-- New website: UTF-8, static .html URLs
-- Compares visible text and internal links
-- Tests legacy .shtml -> .html redirects independently
-- Checks linked files with HEAD requests (no downloads)
-- Crawls internal pages recursively
-- Uses concurrent requests
-- Reports only problems, followed by a final summary
+Old site:
+    https://temnyjles.ru/
+    Windows-1251, mostly .shtml
 
-Python 3.10+
-No third-party dependencies.
+New site:
+    https://temnyjles.roman-79c.workers.dev/
+    UTF-8, mostly .html
+
+Checks:
+- Each HTML page is queued and fetched at most once.
+- Each resource is queued and checked at most once.
+- URLs are normalized before deduplication.
+- Old and new page text is compared.
+- Internal links are compared.
+- Legacy .shtml URLs on the new site must redirect with HTTP 301.
+- Resources are checked separately from HTML pages.
+- Sequential execution: no threads or concurrency.
+
+Python 3.10+, standard library only.
 """
 
 from __future__ import annotations
 
-import argparse
-import concurrent.futures
-import difflib
 import re
 import sys
-import threading
+import time
+import socket
+import urllib.request
+import urllib.error
 
 from collections import deque
-from dataclasses import dataclass, field
 from html.parser import HTMLParser
-from urllib.error import HTTPError
-from urllib.parse import urljoin, urlsplit, urlunsplit
-from urllib.request import (
-    HTTPRedirectHandler,
-    Request,
-    build_opener,
+from urllib.parse import (
+    urljoin,
+    urlsplit,
+    urlunsplit,
+    unquote,
 )
 
 
-OLD_SITE = "https://temnyjles.ru"
-NEW_SITE = "https://temnyjles.roman-79c.workers.dev"
+# ============================================================
+# CONFIGURATION
+# ============================================================
 
-WORKERS = 12
-TIMEOUT = 20
+OLD_BASE = "https://temnyjles.ru/"
+NEW_BASE = "https://temnyjles.roman-79c.workers.dev/"
 
-FILE_EXTENSIONS = {
-    ".pdf", ".doc", ".docx", ".xls", ".xlsx",
-    ".zip", ".rar", ".7z", ".gz",
-    ".jpg", ".jpeg", ".png", ".gif", ".webp",
-    ".svg", ".ico", ".bmp",
-    ".mp3", ".mp4", ".avi", ".mov",
-    ".css", ".js", ".woff", ".woff2", ".ttf",
-    ".eot", ".xml", ".txt", ".json",
+USER_AGENT = "MigrationChecker/1.0"
+
+CONNECT_TIMEOUT = 15
+READ_TIMEOUT = 30
+MAX_RESPONSE_SIZE = 20 * 1024 * 1024
+
+OLD_ENCODING_FALLBACK = "windows-1251"
+NEW_ENCODING_FALLBACK = "utf-8"
+
+# Add extensions here if your site uses additional page types.
+PAGE_EXTENSIONS = {
+    ".html",
+    ".shtml",
+    ".htm",
 }
 
+# Extensions treated as downloadable/static resources.
+RESOURCE_EXTENSIONS = {
+    ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg",
+    ".ico", ".bmp", ".tif", ".tiff",
+    ".css", ".js", ".json", ".xml",
+    ".pdf", ".zip", ".rar", ".7z", ".gz",
+    ".mp3", ".mp4", ".avi", ".mov", ".webm",
+    ".wav", ".ogg",
+    ".doc", ".docx", ".xls", ".xlsx",
+    ".ppt", ".pptx",
+    ".woff", ".woff2", ".ttf", ".otf", ".eot",
+}
 
-# ----------------------------------------------------------------------
+# Ignore fragments; these do not identify separate documents.
+# Query strings are retained because they can identify different pages.
+IGNORE_QUERY_PARAMETERS = False
+
+# Resource check method. HEAD is efficient; GET fallback is used
+# when the server does not support HEAD.
+RESOURCE_USE_HEAD = True
+
+# Maximum number of bytes read when falling back to GET for resources.
+RESOURCE_GET_LIMIT = 1024
+
+# Optional delay between requests, in seconds.
+REQUEST_DELAY = 0
+
+
+# ============================================================
+# GLOBAL STATE
+# ============================================================
+
+page_queue = deque()
+resource_queue = deque()
+
+# These sets are updated BEFORE an item is added to its queue.
+# They therefore represent every URL ever scheduled, not just
+# URLs already processed.
+queued_pages = set()
+queued_resources = set()
+
+# Separate completion sets for reporting and defensive checks.
+checked_pages = set()
+checked_resources = set()
+
+errors = []
+warnings = []
+
+page_count = 0
+resource_count = 0
+
+def report_error(message):
+    errors.append(message)
+    print(f"  [ERROR] {message}", flush=True)
+
+
+def report_warning(message):
+    warnings.append(message)
+    print(f"  [WARN]  {message}", flush=True)
+
+
+def report_difference(message):
+    print(f"  [DIFF]  {message}", flush=True)
+
+# ============================================================
+# URL HELPERS
+# ============================================================
+
+def remove_fragment(url):
+    p = urlsplit(url)
+    return urlunsplit((p.scheme, p.netloc, p.path, p.query, ""))
+
+
+def normalize_path(path):
+    if not path:
+        path = "/"
+
+    path = unquote(path)
+    path = re.sub(r"/+", "/", path)
+
+    if not path.startswith("/"):
+        path = "/" + path
+
+    # Keep root as root.
+    if path != "/" and path.endswith("/"):
+        path = path.rstrip("/")
+
+    return path
+
+
+def normalize_url(url):
+    """
+    Normalize an absolute or relative URL into a logical internal path.
+
+    Old and new domains are treated as the same internal site.
+    .shtml and .html map to the same logical page key.
+    """
+
+    url = remove_fragment(url.strip())
+
+    absolute = urljoin(NEW_BASE, url)
+    p = urlsplit(absolute)
+
+    path = normalize_path(p.path)
+
+    if IGNORE_QUERY_PARAMETERS:
+        query = ""
+    else:
+        query = p.query
+
+    # Canonicalize old/new page extensions for deduplication.
+    lower_path = path.lower()
+
+    if lower_path.endswith(".shtml"):
+        path = path[:-6] + ".html"
+
+    return path + (("?" + query) if query else "")
+
+
+def is_internal_url(url):
+    p = urlsplit(url)
+
+    if not p.netloc:
+        return True
+
+    host = p.netloc.lower().split(":")[0]
+
+    old_host = urlsplit(OLD_BASE).netloc.lower().split(":")[0]
+    new_host = urlsplit(NEW_BASE).netloc.lower().split(":")[0]
+
+    return host in {old_host, new_host}
+
+
+def logical_key_to_old_url(key):
+    p = urlsplit(key)
+    path = p.path
+
+    # Logical .html maps to legacy .shtml on old site.
+    if path.lower().endswith(".html"):
+        path = path[:-5] + ".shtml"
+
+    return urljoin(OLD_BASE, path.lstrip("/")) + (
+        ("?" + p.query) if p.query else ""
+    )
+
+
+def logical_key_to_new_url(key):
+    p = urlsplit(key)
+    path = p.path
+
+    return urljoin(NEW_BASE, path.lstrip("/")) + (
+        ("?" + p.query) if p.query else ""
+    )
+
+
+def logical_key_to_new_legacy_url(key):
+    p = urlsplit(key)
+    path = p.path
+
+    if path.lower().endswith(".html"):
+        path = path[:-5] + ".shtml"
+
+    return urljoin(NEW_BASE, path.lstrip("/")) + (
+        ("?" + p.query) if p.query else ""
+    )
+
+
+def extension_of(url):
+    path = urlsplit(url).path.lower()
+
+    # No extension for directory-like URLs.
+    filename = path.rsplit("/", 1)[-1]
+
+    if "." not in filename:
+        return ""
+
+    return "." + filename.rsplit(".", 1)[-1]
+
+
+def is_page_url(url):
+    ext = extension_of(url)
+
+    if not ext:
+        return True
+
+    return ext in PAGE_EXTENSIONS
+
+
+def is_resource_url(url):
+    return extension_of(url) in RESOURCE_EXTENSIONS
+
+
+# ============================================================
+# QUEUE MANAGEMENT
+# ============================================================
+
+def add_page(url):
+    """
+    Schedule an HTML page once.
+
+    Crucially, queued_pages is updated BEFORE appending to the queue.
+    """
+
+    if not is_internal_url(url):
+        return
+
+    key = normalize_url(url)
+
+    if not is_page_url(key):
+        return
+
+    if key in queued_pages:
+        return
+
+    queued_pages.add(key)
+    page_queue.append(key)
+
+
+def add_resource(url):
+    """
+    Schedule a resource once.
+
+    Crucially, queued_resources is updated BEFORE appending.
+    """
+
+    if not is_internal_url(url):
+        return
+
+    key = normalize_url(url)
+
+    if not is_resource_url(key):
+        return
+
+    if key in queued_resources:
+        return
+
+    queued_resources.add(key)
+    resource_queue.append(key)
+
+
+# ============================================================
 # HTTP
-# ----------------------------------------------------------------------
+# ============================================================
 
-@dataclass
-class Response:
-    status: int
-    url: str
-    headers: dict
-    body: bytes = b""
-    redirects: list = field(default_factory=list)
-    error: str | None = None
-
-
-class RedirectRecorder(HTTPRedirectHandler):
-
+class RedirectRecorder(urllib.request.HTTPRedirectHandler):
     def __init__(self):
         super().__init__()
         self.redirects = []
 
-    def redirect_request(self, req, fp, code, msg, headers, newurl):
-        self.redirects.append((code, req.full_url, newurl))
+    def redirect_request(
+        self,
+        req,
+        fp,
+        code,
+        msg,
+        headers,
+        newurl,
+    ):
+        self.redirects.append({
+            "code": code,
+            "url": newurl,
+        })
+
         return super().redirect_request(
             req, fp, code, msg, headers, newurl
         )
 
 
-def request(url: str, method="GET") -> Response:
+def request_url(url, method="GET", read_body=True, max_bytes=None):
+    """
+    Perform one HTTP request and record redirects.
+
+    Returns:
+        {
+            status,
+            final_url,
+            redirects,
+            headers,
+            body,
+            error
+        }
+    """
 
     recorder = RedirectRecorder()
-    opener = build_opener(recorder)
 
-    req = Request(
+    opener = urllib.request.build_opener(recorder)
+
+    request = urllib.request.Request(
         url,
-        method=method,
         headers={
-            "User-Agent": "SiteMigrationChecker/2.0",
-            "Accept": "text/html,application/xhtml+xml,*/*",
+            "User-Agent": USER_AGENT,
+            "Accept": "*/*",
         },
+        method=method,
     )
 
-    try:
-        with opener.open(req, timeout=TIMEOUT) as r:
-            body = r.read() if method == "GET" else b""
+    result = {
+        "status": None,
+        "final_url": url,
+        "redirects": [],
+        "headers": {},
+        "body": b"",
+        "error": None,
+    }
 
-            return Response(
-                status=r.status,
-                url=r.url,
-                headers=dict(r.headers.items()),
-                body=body,
-                redirects=recorder.redirects,
+    try:
+        if REQUEST_DELAY:
+            time.sleep(REQUEST_DELAY)
+
+        with opener.open(request, timeout=CONNECT_TIMEOUT) as response:
+            result["status"] = response.status
+            result["final_url"] = response.geturl()
+            result["headers"] = dict(response.headers.items())
+            result["redirects"] = list(recorder.redirects)
+
+            if read_body:
+                if max_bytes is None:
+                    body = response.read(MAX_RESPONSE_SIZE + 1)
+                    if len(body) > MAX_RESPONSE_SIZE:
+                        raise ValueError(
+                            f"Response exceeded {MAX_RESPONSE_SIZE} bytes"
+                        )
+                    result["body"] = body
+                else:
+                    result["body"] = response.read(max_bytes)
+
+    except urllib.error.HTTPError as exc:
+        result["status"] = exc.code
+        result["final_url"] = exc.geturl()
+        result["headers"] = dict(exc.headers.items()) if exc.headers else {}
+        result["redirects"] = list(recorder.redirects)
+        result["error"] = str(exc)
+
+    except Exception as exc:
+        result["redirects"] = list(recorder.redirects)
+        result["error"] = f"{type(exc).__name__}: {exc}"
+
+    return result
+
+
+def get_page(url):
+    return request_url(url, method="GET", read_body=True)
+
+
+def check_resource(url):
+    if RESOURCE_USE_HEAD:
+        result = request_url(
+            url,
+            method="HEAD",
+            read_body=False,
+        )
+
+        # Some servers do not implement HEAD correctly.
+        if result["status"] in (405, 501) or result["status"] is None:
+            result = request_url(
+                url,
+                method="GET",
+                read_body=True,
+                max_bytes=RESOURCE_GET_LIMIT,
             )
 
-    except HTTPError as e:
-        return Response(
-            status=e.code,
-            url=e.url,
-            headers=dict(e.headers.items()) if e.headers else {},
-            redirects=recorder.redirects,
-            error=str(e),
-        )
+        return result
 
-    except Exception as e:
-        return Response(
-            status=0,
-            url=url,
-            headers={},
-            redirects=recorder.redirects,
-            error=str(e),
-        )
+    return request_url(
+        url,
+        method="GET",
+        read_body=True,
+        max_bytes=RESOURCE_GET_LIMIT,
+    )
 
 
-# ----------------------------------------------------------------------
+# ============================================================
 # HTML PARSING
-# ----------------------------------------------------------------------
+# ============================================================
 
 class PageParser(HTMLParser):
-    """Extract visible text and links from HTML."""
-
-    SKIP_TAGS = {
-        "script", "style", "noscript", "svg",
-    }
-
-    BLOCK_TAGS = {
-        "address", "article", "aside", "blockquote",
-        "br", "dd", "div", "dl", "dt", "fieldset",
-        "figcaption", "figure", "footer", "form",
-        "h1", "h2", "h3", "h4", "h5", "h6",
-        "header", "hr", "li", "main", "nav",
-        "ol", "p", "pre", "section", "table",
-        "td", "th", "tr", "ul",
-    }
-
     def __init__(self):
         super().__init__(convert_charrefs=True)
+
         self.text_parts = []
-        self.links = set()
+        self.links = []
+
         self.skip_depth = 0
 
     def handle_starttag(self, tag, attrs):
-
+        tag = tag.lower()
         attrs = dict(attrs)
 
-        if tag in self.SKIP_TAGS:
+        if tag in ("script", "style", "noscript", "svg"):
             self.skip_depth += 1
+            return
 
-        if tag in self.BLOCK_TAGS and not self.skip_depth:
-            self.text_parts.append(" ")
+        if self.skip_depth:
+            return
 
-        # Navigational links
-        if tag in ("a", "area") and attrs.get("href"):
-            self.links.add(attrs["href"])
+        if tag in ("a", "area"):
+            href = attrs.get("href")
+            if href:
+                self.links.append(href)
 
-        # Linked resources
-        if tag in (
-            "link", "img", "script", "iframe",
-            "source", "video", "audio", "input",
-        ):
-            for attr in ("href", "src", "poster"):
-                if attrs.get(attr):
-                    self.links.add(attrs[attr])
+        elif tag in ("img", "script", "iframe", "source", "video", "audio"):
+            src = attrs.get("src")
+            if src:
+                self.links.append(src)
 
-            # srcset can contain multiple resources
-            if attrs.get("srcset"):
-                for item in attrs["srcset"].split(","):
-                    src = item.strip().split()
-                    if src:
-                        self.links.add(src[0])
+        elif tag == "link":
+            href = attrs.get("href")
+            if href:
+                self.links.append(href)
+
+        elif tag == "object":
+            data = attrs.get("data")
+            if data:
+                self.links.append(data)
 
     def handle_endtag(self, tag):
+        tag = tag.lower()
 
-        if tag in self.SKIP_TAGS and self.skip_depth:
-            self.skip_depth -= 1
-
-        if tag in self.BLOCK_TAGS and not self.skip_depth:
-            self.text_parts.append(" ")
+        if tag in ("script", "style", "noscript", "svg"):
+            if self.skip_depth:
+                self.skip_depth -= 1
 
     def handle_data(self, data):
+        if self.skip_depth:
+            return
 
-        if not self.skip_depth:
-            self.text_parts.append(data)
+        text = data.strip()
 
-    def get_text(self):
-        return " ".join("".join(self.text_parts).split())
+        if text:
+            self.text_parts.append(text)
 
 
-def get_charset(headers, body, fallback):
-    """Determine encoding from HTTP header, then meta tag."""
+def detect_encoding(headers, body, fallback):
+    content_type = ""
 
-    content_type = next(
-        (
-            value for key, value in headers.items()
-            if key.lower() == "content-type"
-        ),
-        "",
-    )
+    for key, value in headers.items():
+        if key.lower() == "content-type":
+            content_type = value
+            break
 
     match = re.search(
         r"charset\s*=\s*[\"']?([^;\s\"']+)",
@@ -221,10 +515,11 @@ def get_charset(headers, body, fallback):
     if match:
         return match.group(1)
 
+    # Look for charset in the first part of the document.
     head = body[:8192].decode("ascii", errors="ignore")
 
     match = re.search(
-        r'<meta[^>]+charset\s*=\s*["\']?\s*([\w-]+)',
+        r"<meta[^>]+charset\s*=\s*[\"']?([^\"'\s/>]+)",
         head,
         re.I,
     )
@@ -233,7 +528,7 @@ def get_charset(headers, body, fallback):
         return match.group(1)
 
     match = re.search(
-        r'<meta[^>]+content\s*=\s*["\'][^"\']*charset=([\w-]+)',
+        r"<meta[^>]+content\s*=\s*[\"'][^\"']*charset=([^\"';\s]+)",
         head,
         re.I,
     )
@@ -244,682 +539,353 @@ def get_charset(headers, body, fallback):
     return fallback
 
 
-def parse_page(response, fallback_encoding):
-
-    charset = get_charset(
-        response.headers,
-        response.body,
-        fallback_encoding,
+def decode_body(result, fallback):
+    encoding = detect_encoding(
+        result["headers"],
+        result["body"],
+        fallback,
     )
 
     try:
-        html = response.body.decode(charset, errors="replace")
+        return result["body"].decode(encoding, errors="replace")
     except LookupError:
-        html = response.body.decode(
-            fallback_encoding, errors="replace"
-        )
+        return result["body"].decode(fallback, errors="replace")
+
+
+def parse_html(result, fallback):
+    html = decode_body(result, fallback)
 
     parser = PageParser()
-    parser.feed(html)
 
-    return parser.get_text(), parser.links
+    try:
+        parser.feed(html)
+        parser.close()
+    except Exception:
+        pass
 
+    text = " ".join(parser.text_parts)
+    text = re.sub(r"\s+", " ", text).strip()
 
-# ----------------------------------------------------------------------
-# URL NORMALIZATION AND CLASSIFICATION
-# ----------------------------------------------------------------------
+    # Normalize empty placeholder text.
+    text = re.sub(r"\(\s*none\s*\)", "", text, flags=re.I)
+    text = re.sub(r"\s+", " ", text).strip()
 
-def canonical_path(path):
-    """Treat old .shtml and new .html URLs as equivalent."""
-
-    path = path or "/"
-
-    if path.lower().endswith(".shtml"):
-        path = path[:-6] + ".html"
-
-    return path
+    return text, parser.links
 
 
-def url_key(url):
-    p = urlsplit(url)
-    path = canonical_path(p.path)
+# ============================================================
+# REDIRECT CHECKS
+# ============================================================
 
-    if not path:
-        path = "/"
+def first_redirect_status(result):
+    redirects = result["redirects"]
 
-    return path + ("?" + p.query if p.query else "")
-
-
-def is_file(url):
-    path = urlsplit(url).path.lower()
-    return any(path.endswith(ext) for ext in FILE_EXTENSIONS)
-
-
-def is_internal(url, base):
-    return (
-        urlsplit(url).netloc.lower()
-        == urlsplit(base).netloc.lower()
-    )
-
-
-def counterpart_url(base, key, old=False):
-    """Build the corresponding URL on the other website."""
-
-    p = urlsplit(key)
-    path = p.path
-
-    if old and path.lower().endswith(".html"):
-        path = path[:-5] + ".shtml"
-
-    base_parts = urlsplit(base)
-
-    return urlunsplit((
-        base_parts.scheme,
-        base_parts.netloc,
-        path,
-        p.query,
-        "",
-    ))
-
-
-# ----------------------------------------------------------------------
-# COMPARISON
-# ----------------------------------------------------------------------
-
-def compare_text(old_text, new_text):
-
-    if old_text == new_text:
+    if not redirects:
         return None
 
-    matcher = difflib.SequenceMatcher(
-        None, old_text, new_text, autojunk=False
-    )
+    return redirects[0]["code"]
 
-    differences = []
 
-    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+def same_destination(actual, expected):
+    """
+    Compare redirect destination paths, ignoring domain and fragments.
+    """
 
-        if tag == "equal":
+    actual_abs = urljoin(NEW_BASE, actual)
+    expected_abs = urljoin(NEW_BASE, expected)
+
+    a = urlsplit(actual_abs)
+    e = urlsplit(expected_abs)
+
+    actual_path = normalize_path(a.path)
+    expected_path = normalize_path(e.path)
+
+    if actual_path == "/index.html":
+        actual_path = "/"
+
+    if actual_path == "/index.shtml":
+        actual_path = "/"
+
+    return actual_path == expected_path
+
+
+def check_legacy_redirect(key):
+    legacy_url = logical_key_to_new_legacy_url(key)
+    canonical_url = logical_key_to_new_url(key)
+
+    result = get_page(legacy_url)
+
+    if result["error"] and result["status"] is None:
+        report_error(
+            f"LEGACY REQUEST FAILED: {legacy_url} — {result['error']}"
+        )
+        return
+
+    code = first_redirect_status(result)
+
+    if code != 301:
+        report_error(
+            f"LEGACY REDIRECT NOT 301: {legacy_url} "
+            f"(first redirect: {code}, final status: {result['status']})"
+        )
+        return
+
+    if result["status"] is None or not (200 <= result["status"] < 300):
+        report_error(
+            f"LEGACY REDIRECT FINAL STATUS: {legacy_url} "
+            f"(status: {result['status']})"
+        )
+        return
+
+    if not same_destination(result["final_url"], canonical_url):
+        # The home page may legitimately redirect to /.
+        if key in ("/index.html", "/"):
+            if not same_destination(result["final_url"], NEW_BASE):
+                report_error(
+                    f"LEGACY REDIRECT WRONG DESTINATION: {legacy_url} "
+                    f"-> {result['final_url']}"
+                )
+        else:
+            report_error(
+                f"LEGACY REDIRECT WRONG DESTINATION: {legacy_url} "
+                f"-> {result['final_url']} (expected {canonical_url})"
+            )
+
+
+# ============================================================
+# PAGE PROCESSING
+# ============================================================
+
+def discover_links(links, base_url):
+    discovered_pages = set()
+    discovered_resources = set()
+
+    for href in links:
+        href = href.strip()
+
+        if not href:
             continue
 
-        differences.append({
-            "type": tag,
-            "old": old_text[
-                max(0, i1 - 50):min(len(old_text), i2 + 50)
-            ],
-            "new": new_text[
-                max(0, j1 - 50):min(len(new_text), j2 + 50)
-            ],
-        })
+        if href.startswith((
+            "mailto:",
+            "tel:",
+            "javascript:",
+            "data:",
+        )):
+            continue
 
-        if len(differences) >= 5:
-            break
+        absolute = urljoin(base_url, href)
 
-    return differences
+        if not is_internal_url(absolute):
+            continue
 
+        key = normalize_url(absolute)
 
-def compare_links(
-    old_links,
-    new_links,
-    old_url,
-    new_url,
-    old_base,
-    new_base,
-):
-    """Compare links using normalized internal URL keys."""
+        if is_resource_url(key):
+            discovered_resources.add(key)
+        elif is_page_url(key):
+            discovered_pages.add(key)
 
-    def collect(links, page_url, base):
-
-        result = {}
-
-        for href in links:
-
-            if not href:
-                continue
-
-            absolute = urljoin(page_url, href)
-            p = urlsplit(absolute)
-
-            if p.scheme not in ("http", "https"):
-                continue
-
-            if p.username or p.password:
-                continue
-
-            absolute = urlunsplit((
-                p.scheme, p.netloc, p.path, p.query, ""
-            ))
-
-            if is_internal(absolute, base):
-                key = url_key(absolute)
-            else:
-                key = absolute
-
-            result[key] = absolute
-
-        return result
-
-    old_map = collect(old_links, old_url, old_base)
-    new_map = collect(new_links, new_url, new_base)
-
-    old_keys = set(old_map)
-    new_keys = set(new_map)
-
-    return {
-        "old_only": sorted(old_keys - new_keys),
-        "new_only": sorted(new_keys - old_keys),
-        "old_map": old_map,
-        "new_map": new_map,
-    }
+    return discovered_pages, discovered_resources
 
 
-# ----------------------------------------------------------------------
-# REDIRECT VALIDATION
-# ----------------------------------------------------------------------
-
-def check_legacy_redirect(
-    old_url,
-    new_canonical_url,
-):
+def process_page(key):
     """
-    Independently test the new site's legacy .shtml URL.
+    Process one logical page.
 
-    Expected:
-      Initial response: 301
-      Destination: corresponding .html URL
-      Final response: 2xx
+    Always returns (new_pages, new_resources), including on errors.
     """
 
-    old_parts = urlsplit(old_url)
-    new_parts = urlsplit(new_canonical_url)
+    old_url = logical_key_to_old_url(key)
+    new_url = logical_key_to_new_url(key)
 
-    if not old_parts.path.lower().endswith(".shtml"):
-        return None
+    old_result = get_page(old_url)
 
-    legacy_url = urlunsplit((
-        new_parts.scheme,
-        new_parts.netloc,
-        old_parts.path,
-        old_parts.query,
-        "",
-    ))
-
-    response = request(legacy_url, "GET")
-
-    issues = []
-
-    if not response.redirects:
-        issues.append(
-            f"Expected HTTP 301 for {legacy_url}, "
-            f"but no redirect occurred (final status: "
-            f"{response.status})"
+    if old_result["status"] is None or not (200 <= old_result["status"] < 300):
+        report_error(
+            f"OLD PAGE FAILED: {old_url} "
+            f"(status: {old_result['status']}, error: {old_result['error']})"
         )
-        return issues
+        return set(), set()
 
-    first_code, first_from, first_to = response.redirects[0]
+    new_result = get_page(new_url)
 
-    expected_path = new_parts.path
-    actual_first_path = urlsplit(
-        urljoin(legacy_url, first_to)
-    ).path
-
-    if first_code != 301:
-        issues.append(
-            f"Expected HTTP 301, received HTTP {first_code}"
+    if new_result["status"] is None or not (200 <= new_result["status"] < 300):
+        report_error(
+            f"NEW PAGE FAILED: {new_url} "
+            f"(status: {new_result['status']}, error: {new_result['error']})"
         )
+        return set(), set()
 
-    if actual_first_path != expected_path:
-        issues.append(
-            f"Wrong redirect destination: {actual_first_path} "
-            f"(expected {expected_path})"
+    old_text, old_links = parse_html(
+        old_result,
+        OLD_ENCODING_FALLBACK,
+    )
+
+    new_text, new_links = parse_html(
+        new_result,
+        NEW_ENCODING_FALLBACK,
+    )
+
+    if old_text != new_text:
+        report_difference(
+            f"TEXT DIFFERENCE: {key} "
+            f"(old {len(old_text)} chars, new {len(new_text)} chars)"
         )
 
-    final_path = urlsplit(response.url).path
+    old_pages, old_resources = discover_links(old_links, old_url)
+    new_pages, new_resources = discover_links(new_links, new_url)
 
-    if not (200 <= response.status < 300):
-        issues.append(
-            f"Redirect destination returned HTTP {response.status}"
+    missing_new_links = old_pages - new_pages
+    extra_new_links = new_pages - old_pages
+
+    if missing_new_links:
+        report_difference(
+            f"LINKS MISSING ON NEW PAGE: {key}: "
+            + ", ".join(sorted(missing_new_links))
         )
 
-    if final_path != expected_path:
-        issues.append(
-            f"Final URL is {final_path}, "
-            f"expected {expected_path}"
+    if extra_new_links:
+        report_difference(
+            f"EXTRA LINKS ON NEW PAGE: {key}: "
+            + ", ".join(sorted(extra_new_links))
         )
 
-    if response.error:
-        issues.append(f"Request error: {response.error}")
+    # Discover pages from both versions.
+    # The add_page function performs deduplication immediately.
+    for page in old_pages:
+        add_page(page)
 
-    return issues or None
+    for page in new_pages:
+        add_page(page)
+
+    # Discover resources from both versions.
+    for resource in old_resources:
+        add_resource(resource)
+
+    for resource in new_resources:
+        add_resource(resource)
+
+    # Verify old-style URL on the NEW site redirects to canonical URL.
+    check_legacy_redirect(key)
+
+    return old_pages | new_pages, old_resources | new_resources
 
 
-# ----------------------------------------------------------------------
-# REPORTING
-# ----------------------------------------------------------------------
+# ============================================================
+# RESOURCE PROCESSING
+# ============================================================
 
-class Reporter:
+def process_resource(key):
+    url = logical_key_to_new_url(key)
 
-    def __init__(self):
+    result = check_resource(url)
 
-        self.lock = threading.Lock()
-
-        self.stats = {
-            "pages_checked": 0,
-            "files_checked": 0,
-            "text_differences": 0,
-            "link_differences": 0,
-            "page_errors": 0,
-            "file_errors": 0,
-            "redirect_errors": 0,
-        }
-
-    def log(self, message=""):
-
-        with self.lock:
-            print(message, flush=True)
-
-    def increment(self, key, amount=1):
-
-        with self.lock:
-            self.stats[key] += amount
-
-    def summary(self):
-
-        self.log("\n" + "=" * 70)
-        self.log("MIGRATION AUDIT SUMMARY")
-        self.log("=" * 70)
-
-        for key, value in self.stats.items():
-            label = key.replace("_", " ").capitalize()
-            self.log(f"{label:25} {value:>8}")
-
-        errors = sum(
-            self.stats[key]
-            for key in (
-                "text_differences",
-                "link_differences",
-                "page_errors",
-                "file_errors",
-                "redirect_errors",
-            )
+    if result["status"] is None or not (200 <= result["status"] < 400):
+        report_error(
+            f"RESOURCE FAILED: {url} "
+            f"(status: {result['status']}, error: {result['error']})"
         )
 
-        self.log("-" * 70)
 
-        if errors:
-            self.log(f"RESULT: ISSUES FOUND ({errors})")
-        else:
-            self.log("RESULT: ALL CHECKS PASSED")
-
-        self.log("=" * 70)
-
-        return errors
-
-
-# ----------------------------------------------------------------------
-# CRAWLER
-# ----------------------------------------------------------------------
-
-def crawl(old_base, new_base, workers):
-
-    reporter = Reporter()
-
-    old_base = old_base.rstrip("/") + "/"
-    new_base = new_base.rstrip("/") + "/"
-
-    queue = deque([
-        ("/", old_base, new_base)
-    ])
-
-    visited = set()
-    pending_files = {}
-
-    with concurrent.futures.ThreadPoolExecutor(
-        max_workers=workers
-    ) as executor:
-
-        while queue:
-
-            batch = []
-
-            while queue and len(batch) < workers:
-
-                key, old_url, new_url = queue.popleft()
-
-                if key in visited:
-                    continue
-
-                visited.add(key)
-                batch.append((key, old_url, new_url))
-
-            if not batch:
-                continue
-
-            futures = {}
-
-            # Fetch old and new canonical page URLs.
-            for key, old_url, new_url in batch:
-
-                futures[(key, "old")] = executor.submit(
-                    request, old_url, "GET"
-                )
-
-                futures[(key, "new")] = executor.submit(
-                    request, new_url, "GET"
-                )
-
-                # Test legacy redirect independently.
-                if urlsplit(old_url).path.lower().endswith(".shtml"):
-                    futures[(key, "legacy")] = executor.submit(
-                        check_legacy_redirect,
-                        old_url,
-                        new_url,
-                    )
-
-            for key, old_url, new_url in batch:
-
-                old_response = futures[(key, "old")].result()
-                new_response = futures[(key, "new")].result()
-
-                reporter.increment("pages_checked")
-
-                issues = []
-
-                # Page request errors
-                if old_response.error or new_response.error:
-
-                    reporter.increment("page_errors")
-
-                    if old_response.error:
-                        issues.append(
-                            f"OLD request error: {old_response.error}"
-                        )
-
-                    if new_response.error:
-                        issues.append(
-                            f"NEW request error: {new_response.error}"
-                        )
-
-                if not (200 <= old_response.status < 300):
-
-                    reporter.increment("page_errors")
-
-                    issues.append(
-                        f"OLD page returned HTTP {old_response.status}"
-                    )
-
-                if not (200 <= new_response.status < 300):
-
-                    reporter.increment("page_errors")
-
-                    issues.append(
-                        f"NEW page returned HTTP {new_response.status}"
-                    )
-
-                # A canonical .html URL should serve directly.
-                if new_response.redirects:
-
-                    reporter.increment("redirect_errors")
-
-                    first_code, _, first_to = (
-                        new_response.redirects[0]
-                    )
-
-                    issues.append(
-                        "Canonical NEW URL unexpectedly redirects: "
-                        f"HTTP {first_code} -> {first_to}"
-                    )
-
-                # Independent legacy redirect test.
-                if (key, "legacy") in futures:
-
-                    redirect_issues = futures[
-                        (key, "legacy")
-                    ].result()
-
-                    if redirect_issues:
-
-                        reporter.increment(
-                            "redirect_errors",
-                            len(redirect_issues),
-                        )
-
-                        for problem in redirect_issues:
-                            issues.append(
-                                f"Legacy redirect: {problem}"
-                            )
-
-                # Do not compare content if either page failed.
-                pages_ok = (
-                    200 <= old_response.status < 300
-                    and 200 <= new_response.status < 300
-                    and not old_response.error
-                    and not new_response.error
-                )
-
-                if pages_ok:
-
-                    old_text, old_links = parse_page(
-                        old_response, "windows-1251"
-                    )
-
-                    new_text, new_links = parse_page(
-                        new_response, "utf-8"
-                    )
-
-                    # Compare visible text.
-                    differences = compare_text(
-                        old_text, new_text
-                    )
-
-                    if differences:
-
-                        reporter.increment("text_differences")
-
-                        issues.append("Visible text differs:")
-
-                        for diff in differences:
-
-                            issues.append(
-                                f"  {diff['type']}:"
-                            )
-
-                            issues.append(
-                                f"    OLD: {diff['old']!r}"
-                            )
-
-                            issues.append(
-                                f"    NEW: {diff['new']!r}"
-                            )
-
-                    # Compare links.
-                    links = compare_links(
-                        old_links,
-                        new_links,
-                        old_response.url,
-                        new_response.url,
-                        old_base,
-                        new_base,
-                    )
-
-                    if links["old_only"] or links["new_only"]:
-
-                        reporter.increment("link_differences")
-
-                        issues.append("Link differences:")
-
-                        for link in links["old_only"]:
-                            issues.append(f"  OLD ONLY: {link}")
-
-                        for link in links["new_only"]:
-                            issues.append(f"  NEW ONLY: {link}")
-
-                    old_map = links["old_map"]
-                    new_map = links["new_map"]
-
-                    # Build matching internal destinations.
-                    all_keys = set(old_map) | set(new_map)
-
-                    for link_key in all_keys:
-
-                        # External links are not crawled.
-                        if link_key.startswith(
-                            ("http://", "https://")
-                        ):
-                            if not (
-                                is_internal(link_key, old_base)
-                                or is_internal(link_key, new_base)
-                            ):
-                                continue
-
-                        old_target = old_map.get(link_key)
-                        new_target = new_map.get(link_key)
-
-                        if not old_target:
-                            old_target = counterpart_url(
-                                old_base, link_key, old=True
-                            )
-
-                        if not new_target:
-                            new_target = counterpart_url(
-                                new_base, link_key, old=False
-                            )
-
-                        old_internal = is_internal(
-                            old_target, old_base
-                        )
-
-                        new_internal = is_internal(
-                            new_target, new_base
-                        )
-
-                        if not (old_internal and new_internal):
-                            continue
-
-                        if is_file(old_target) or is_file(new_target):
-
-                            pending_files[link_key] = (
-                                old_target, new_target
-                            )
-
-                        elif link_key not in visited:
-
-                            queue.append((
-                                link_key,
-                                old_target,
-                                new_target,
-                            ))
-
-                # Print only pages with problems.
-                if issues:
-
-                    reporter.log("")
-                    reporter.log(f"PAGE: {key}")
-
-                    for issue in issues:
-                        reporter.log(f"  {issue}")
-
-        # --------------------------------------------------------------
-        # CHECK FILES
-        # --------------------------------------------------------------
-
-        file_futures = {}
-
-        for key, (old_url, new_url) in pending_files.items():
-
-            file_futures[(key, "old")] = executor.submit(
-                request, old_url, "HEAD"
-            )
-
-            file_futures[(key, "new")] = executor.submit(
-                request, new_url, "HEAD"
-            )
-
-        for key, (old_url, new_url) in pending_files.items():
-
-            old_r = file_futures[(key, "old")].result()
-            new_r = file_futures[(key, "new")].result()
-
-            reporter.increment("files_checked")
-
-            old_ok = (
-                200 <= old_r.status < 400
-                and not old_r.error
-            )
-
-            new_ok = (
-                200 <= new_r.status < 400
-                and not new_r.error
-            )
-
-            if old_ok and new_ok:
-                continue
-
-            reporter.increment("file_errors")
-
-            reporter.log("")
-            reporter.log(f"FILE ERROR: {key}")
-
-            reporter.log(
-                f"  OLD: HTTP {old_r.status} "
-                f"{old_r.error or old_r.url}"
-            )
-
-            reporter.log(
-                f"  NEW: HTTP {new_r.status} "
-                f"{new_r.error or new_r.url}"
-            )
-
-    return reporter.summary()
-
-
-# ----------------------------------------------------------------------
-# MAIN
-# ----------------------------------------------------------------------
+# ============================================================
+# MAIN CRAWLER
+# ============================================================
 
 def main():
+    global page_count, resource_count
 
-    parser = argparse.ArgumentParser(
-        description="Compare two websites after migration"
-    )
+    print("=" * 70)
+    print("WEBSITE MIGRATION CHECKER")
+    print("=" * 70)
+    print("Old:", OLD_BASE)
+    print("New:", NEW_BASE)
+    print("Mode: sequential")
+    print("Deduplication: at queue insertion")
+    print()
 
-    parser.add_argument(
-        "--old",
-        default=OLD_SITE,
-        help="Old website URL",
-    )
+    add_page("/")
 
-    parser.add_argument(
-        "--new",
-        default=NEW_SITE,
-        help="New website URL",
-    )
+    while page_queue:
+        key = page_queue.popleft()
 
-    parser.add_argument(
-        "-j",
-        "--workers",
-        type=int,
-        default=WORKERS,
-        help="Number of concurrent page pairs",
-    )
+        # Defensive guard. Normally impossible because add_page()
+        # inserts into queued_pages before appending.
+        if key in checked_pages:
+            continue
 
-    args = parser.parse_args()
+        checked_pages.add(key)
+        page_count += 1
 
-    errors = crawl(
-        args.old,
-        args.new,
-        args.workers,
-    )
+        print(
+            f"[{page_count:04d}] "
+            f"Queue: {len(page_queue):05d} | {key}",
+            flush=True,
+        )
 
-    # Useful for automated checks and CI.
-    sys.exit(1 if errors else 0)
+        process_page(key)
+
+        print(f"[DONE] {key}", flush=True)
+
+    print()
+    print("All HTML pages processed.")
+    print(f"Unique pages scheduled: {len(queued_pages)}")
+    print(f"Pages checked: {len(checked_pages)}")
+    print()
+
+    # Process resources only after all pages have been crawled.
+    while resource_queue:
+        key = resource_queue.popleft()
+
+        if key in checked_resources:
+            continue
+
+        checked_resources.add(key)
+        resource_count += 1
+
+        print(
+            f"[RESOURCE {resource_count:05d}] "
+            f"Queue: {len(resource_queue):05d} | {key}",
+            flush=True,
+        )
+
+        process_resource(key)
+
+    print()
+    print("=" * 70)
+    print("FINAL SUMMARY")
+    print("=" * 70)
+
+    print(f"Pages scheduled:   {len(queued_pages)}")
+    print(f"Pages checked:     {len(checked_pages)}")
+    print(f"Resources queued:  {len(queued_resources)}")
+    print(f"Resources checked: {len(checked_resources)}")
+    print(f"Errors:            {len(errors)}")
+    print(f"Warnings:          {len(warnings)}")
+
+    if errors:
+        print()
+        print("--- ERRORS ---")
+        for item in errors:
+            print("[ERROR]", item)
+
+    if warnings:
+        print()
+        print("--- WARNINGS ---")
+        for item in warnings:
+            print("[WARN]", item)
+
+    print()
+    print("Finished.")
 
 
 if __name__ == "__main__":
-
     try:
         main()
-
     except KeyboardInterrupt:
-        print("\nInterrupted.", file=sys.stderr)
+        print("\nStopped by user.")
+        print(f"Pages scheduled: {len(queued_pages)}")
+        print(f"Pages checked: {len(checked_pages)}")
+        print(f"Resources scheduled: {len(queued_resources)}")
+        print(f"Resources checked: {len(checked_resources)}")
         sys.exit(130)
