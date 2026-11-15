@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Акварели Ольги Таллер </title>
+<meta name="keywords" content="акварели">
+<meta name="description" content="Акварели Ольги Таллер 2020 г.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Ольга Таллер </h1>
+<h1> АКВАРЕЛИ 2020 ГОДА </h1>
+<a href="a20-01.jpg"> <img src="a20-01l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-02.jpg"> <img src="a20-02l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-03.jpg"> <img src="a20-03l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-04.jpg"> <img src="a20-04l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-05.jpg"> <img src="a20-05l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-06.jpg"> <img src="a20-06l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-07.jpg"> <img src="a20-07l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-08.jpg"> <img src="a20-08l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-09.jpg"> <img src="a20-09l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-10.jpg"> <img src="a20-10l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-11.jpg"> <img src="a20-11l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-12.jpg"> <img src="a20-12l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<a href="a20-13.jpg"> <img src="a20-13l.jpg" style="padding:2em" alt="акварель Ольги Таллер"> </a>
+<br> <br>
+<h5> Другие акварели Ольги Таллер </h5>
+<a href="akwareli.shtml"> Стр. 1 </a> <br>
+<a href="akvareli.shtml"> Стр. 2 </a> <br>
+<a href="ak.shtml"> Стр. 3 </a> <br>
+<a href="akvar.shtml"> Акварели Ольги Таллер- стр.5 </a> <br>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

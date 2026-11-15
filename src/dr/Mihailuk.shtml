@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Александр Анатольевич Михайлюк </title>
+<meta name="keywords" content="стихи, проза">
+<meta name="description" content="Страница Александра Михайлюка.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Александр Михайлюк </h1>
+<a href="Mih.jpg"> <img src="Mih0.jpg" alt="Александр Михайлюк"> </a>
+<p><a href="Rossia.shtml"> Лирическое повествование о России </a>
+<p><a href="tajny.shtml"> Ясные тайны </a> (поэтические зарисовки)
+<p><a href="maslo.shtml"> Коровье масло </a> (рассказ)
+<p><a href="Mihajluk.shtml"> Стихи </a>
+<p><a href="/autors/Mih.shtml"> Косарев </a> (поэма)
+<p> &nbsp;
+<p><a href="http://www.lit-rain.narod.ru/HTMLs/poetry/Miha.htm"> Стихи Александра Михайлюка </a> на сайте литературного объединения "Дождь"
+<p><a href="http://www.stihi.ru/avtor/michailyuk"> Страница Александра Михайлюка </a> на stihi.ru
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

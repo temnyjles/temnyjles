@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Иван Павлович Наумов </title>
+<meta name="keywords" content="стихи, проза">
+<meta name="description" content="Стихи и рассказы Ивана Наумова опубликованные в 'Литературном Кисловодске'.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Иван Наумов </h1>
+<h6> Ставрополь </h6>
+<img src="Naumov.jpg" alt="Иван Наумов">
+<p><a href="/LK/Naumow.shtml"> Стихи </a> опубликованные в "Литературном Кисловодске"
+<p><a href="/LK/Naumov1.shtml"> Рассказ охотника за орешками или снежный человек </a> (поэма)
+<p><a href="/LK/Naumov.shtml"> Перышко </a> (рассказ)
+<p><a href="/LK/Naumov2.shtml"> Товарищеский суд </a> (рассказ)
+<p><a href="/LK/Pushkin0.shtml"> "Благородный" Дантес и "шизофреник" Пушкин </a> (полемический очерк)
+<p><a href="/LK/Lermont0.shtml"> Полемика Ивана Наумова и Александра Квитка </a> о статье А.Квитка "Мартынов - русский офицер"
+<p><a href="/LK/Naumov0.shtml"> Объявление о выходе сборника стихов Ивана Наумова </a>
+<p> &nbsp;
+<p><a href="http://stihi.ru/avtor/inaumov"> Страница Ивана Наумова на stihi.ru </a>
+<p><a href="http://proza.ru/avtor/inaumov"> Страница Ивана Наумова на proza.ru </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

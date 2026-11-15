@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Иван Матвеевич Гладской </title>
+<meta name="keywords" content="проза">
+<meta name="description" content="Рассказы И.М.Гладского.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right1.shtml"-->
+<h1> Иван Гладской </h1>
+<h6> Село Кочубеевское </h6>
+<a href="/LK/Gladsk.jpg"> <img src="/LK/Gladsk0.jpg" alt="Иван Матвеевич Гладской"> </a>
+<h1> Рассказы </h1>
+<p><a href="/LK/Gladskoj.shtml"> Старость </a>
+<p><a href="/LK/pesni.shtml"> Песня - душа </a>
+<p><a href="/LK/podzvezd.shtml"> Под Счастливой Звездой </a>
+<p><a href="/LK/pustzvon.shtml"> Пустозвон </a>
+<p><a href="/LK/pritvor.shtml"> Притворщик </a>
+<p><a href="/LK/Klepa.shtml"> Тетя Клепа на пляже </a>
+<p><a href="/LK/iscelit.shtml"> Исцелители </a>
+<p><a href="/LK/sonvruku.shtml"> Сон в руку </a>
+<p><a href="/LK/fantazer.shtml"> Фантазер </a>
+<p><a href="/LK/Nastia.shtml"> Настино счастье </a>
+<p><a href="/LK/baranina.shtml"> Баранина к празднику </a>
+<p><a href="/LK/istorii.shtml"> Сельские истории </a>
+<p> &nbsp;
+<p><a href="https://proza.ru/avtor/ivan1932"> Страница Ивана Гладского на proza.ru </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> рисунки Евгения Кенемана </title>
+<meta name="keywords" content="рисунки">
+<meta name="description" content="Рисунки Евгения Кенемана">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Рисунки Евгения Кенемана </h1>
+<a href="Ken1.jpg"> <img src="Ken1l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken2.jpg"> <img src="Ken2l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken3.jpg"> <img src="Ken3l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken4.jpg"> <img src="Ken4l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken5.jpg"> <img src="Ken5l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken6.jpg"> <img src="Ken6l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken7.jpg"> <img src="Ken7l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken8.jpg"> <img src="Ken8l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken9.jpg"> <img src="Ken9l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken10.jpg"> <img src="Ken10l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken11.jpg"> <img src="Ken11l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken12.jpg"> <img src="Ken12l.jpg" alt="рисунок Евгения Кенемана"> </a> &nbsp;
+<a href="Ken13.jpg"> <img src="Ken13l.jpg" alt="рисунок Евгения Кенемана"> </a>
+<p><a href="kartina.jpg"> <img src="kartina0.jpg" alt="картина Евгения Кенемана"> </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Тамара Ивановна Курочкина </title>
+<meta name="keywords" content="проза, мемуары, стихи">
+<meta name="description" content="Проза и стихи Т.И.Курочкиной (Сыктывкар), члена СЖР.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<img src="TIK.jpg" alt="Тамара Курочкина">
+<h1> Тамара Курочкина </h1>
+<h6> член Союза журналистов России </h6>
+<h6> Сыктывкар </h6>
+<p><a href="/LK/detstvo.shtml"> Горьковатый привкус детства </a> (воспоминания)
+<p><a href="/LK/detstvo1.shtml"> Сельское детство </a> (новеллы)
+<p><a href="/LK/Kurochk1.shtml"> Осенний букет георгин. Хаморка </a> (два рассказа)
+<p><a href="/LK/dobrota.shtml"> Доброта </a> (рассказ)
+<p><a href="/LK/Kurochk.shtml"> Грустная дорога в юность </a> (рассказ)
+<p><a href="/LK/nateploh.shtml"> На теплоходе музыка играет </a> (рассказ)
+<p><a href="/LK/Druzhok.shtml"> Дворняжка по кличке Дружок </a> (рассказ)
+<p><a href="/LK/Tamara.shtml"> Стихи </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

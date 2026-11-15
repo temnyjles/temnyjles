@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Кубань </title>
+<meta name="keywords" content="краеведение, Кавказ">
+<meta name="description" content="Фотографии из путеводителя Вячеслава Яновского 'Северный Кавказ от Адыгеи до Дагестана'.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Кубань </h1>
+<table>
+<tr><td><a href="Kuban01.shtml"> <img src="Kuban01l.jpg"> </a> <td><a href="Kuban01.shtml"> БАССЕЙН ПРИ ИСТОЧНИКЕ КАРАЧАЕВСКИЙ ДЖИЛЫСУ </a>
+<tr><td><a href="Kuban02.shtml"> <img src="Kuban02l.jpg"> </a> <td><a href="Kuban02.shtml"> ВИД НА ЭЛЬБРУС ОТ КАРАЧАЕВСКОГО ДЖИЛЫСУ </a>
+<tr><td><a href="Kuban03.shtml"> <img src="Kuban03l.jpg"> </a> <td><a href="Kuban03.shtml"> МЕЛЬНИЦА В ХУРЗУКЕ </a>
+<tr><td><a href="Kuban04.shtml"> <img src="Kuban04l.jpg"> </a> <td><a href="Kuban04.shtml"> СЕЛЕНИЕ ХУРЗУК. ВОЙЛОЧНЫЕ ШАПКИ </a>
+<tr><td><a href="Kuban05.shtml"> <img src="Kuban05l.jpg"> </a> <td><a href="Kuban05.shtml"> СТАРИННЫЕ ДОМА В СЕЛЕНИИ ХУРЗУК </a>
+<tr><td><a href="Kuban06.shtml"> <img src="Kuban06l.jpg"> </a> <td><a href="Kuban06.shtml"> СТАРИННЫЕ ДОМА В СЕЛЕНИИ ХУРЗУК </a>
+<tr><td><a href="Kuban07.shtml"> <img src="Kuban07l.jpg"> </a> <td><a href="Kuban07.shtml"> СТАРИННЫЕ ЖИЛЫЕ ПОСТРОЙКИ В СЕЛЕНИИ ХУРЗУК </a>
+<tr><td><a href="Kuban08.shtml"> <img src="Kuban08l.jpg"> </a> <td><a href="Kuban08.shtml"> УЧКУЛАНСКОЕ УЩЕЛЬЕ </a>
+<tr><td><a href="Kuban09.shtml"> <img src="Kuban09l.jpg"> </a> <td><a href="Kuban09.shtml"> ШОАНИНСКИЙ ХРАМ </a>
+<tr><td><a href="Kuban10.shtml"> <img src="Kuban10l.jpg"> </a> <td><a href="Kuban10.shtml"> ШОАНИНСКИЙ ХРАМ </a>
+</table>
+
+<p> &nbsp;
+<font size="-1">
+<p><a href="Kisl.shtml"> Кисловодск </a> (фотографии)
+<p><a href="Cegem.shtml"> Чегем </a> (фотографии)
+<p><a href="Digor.shtml"> Дигория </a> (фотографии)
+<p><a href="Gunib.shtml"> Гуниб </a> (фотографии)
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

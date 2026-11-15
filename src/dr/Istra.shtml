@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Река Истра </title>
+<meta name="keywords" content="краеведение, фотографии">
+<meta name="description" content="Фотографии берегов Истры.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Людмила Солнцева </h1>
+<h1> ИСТРА </h1>
+<a href="/Istra/I123.jpg"> <img src="/Istra/I123l.jpg" alt="Истра"> </a> &nbsp;
+<a href="/Istra/I270.jpg"> <img src="/Istra/I270l.jpg" alt="Истра"> </a> &nbsp;
+<a href="/Istra/I357.jpg"> <img src="/Istra/I357l.jpg" alt="Истра"> </a> &nbsp;
+<a href="/Istra/I624.jpg"> <img src="/Istra/I624l.jpg" alt="Истра"> </a> <br>
+<a href="/Istra/I737.jpg"> <img src="/Istra/I737l.jpg" alt="Истра"> </a> &nbsp;
+<a href="/Istra/I920.jpg"> <img src="/Istra/I920l.jpg" alt="Истра"> </a> &nbsp;
+<a href="/Istra/I975.jpg"> <img src="/Istra/I975l.jpg" alt="Истра"> </a> &nbsp;
+<a href="/Istra/I980.jpg"> <img src="/Istra/I980l.jpg" alt="Истра"> </a> <br>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

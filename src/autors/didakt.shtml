@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> дидактические стихи </title>
+<meta name="keywords" content="стихи">
+<meta name="description" content="Ю.Насимович. Стихи о грибах. Стихи о деревьях. Стихи о кустарниках. Стихи о травах. Азбука. Стихи Мазинга о растениях.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Дидактические стихи Юрия Насимовича </h1>
+<p><a href="/didakticheskie_stihi/gribi-kn.shtml"> Стихи о грибах </a>
+<p><a href="/didakticheskie_stihi/rasr-kr.shtml"> Стихи о деревьях </a>
+<p><a href="/didakticheskie_stihi/rasr-kr1.shtml"> Стихи о кустарниках </a>
+<p><a href="/didakticheskie_stihi/rasr-kr2.shtml"> Стихи о травах </a>
+<p><a href="/didakticheskie_stihi/azb-poln.shtml"> Азбука </a>
+
+<p><a href="/didakticheskie_stihi/Mazing.shtml"> Виктор Мазинг. Ты только посмотри... (Стихи о растениях) </a> Перевод с эстонского Ю.Насимовича
+<p> <small> <a href="Nasim.shtml"> Стихи Юрия Насимовича </a> </small>
+<p> <img src="Jura3.jpg" alt="Юрий Насимович" title="Юрий Насимович"> <br>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

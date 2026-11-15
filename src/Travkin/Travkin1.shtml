@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Картины Алексея Травкина </title>
+<meta name="keywords" content="живопись">
+<meta name="description" content="Картины Алексея Травкина.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Картины Алексея Травкина </h1>
+<a href="buket.jpg"> <img src="buket0.jpg"> </a> &nbsp;
+<a href="rozy.jpg"> <img src="rozy0.jpg"> </a> &nbsp;
+<a href="allea.jpg"> <img src="allea0.jpg"> </a> &nbsp;
+<a href="lob.jpg"> <img src="lob0.jpg"> </a> &nbsp;
+<a href="peizazh.jpg"> <img src="peizazh0.jpg"> </a> &nbsp;
+<a href="palma.jpg"> <img src="palma0.jpg"> </a> &nbsp;
+<br> <br>
+<table cellspacing="0.5em">
+<tr><td> <a href="kaban.jpg"> <img src="kaban0.jpg"> </a>
+<td> <a href="uscelie.jpg"> <img src="uscelie0.jpg"> </a>
+<td> <a href="kurgan.jpg"> <img src="kurgan0.jpg"> </a>
+<td> <a href="Niklob.jpg"> <img src="Niklob0.jpg"> </a>
+<td> <a href="Arhyz.jpg"> <img src="Arhyz0.jpg"> </a>
+<td> <a href="Kremush.jpg"> <img src="Kremush0.jpg"> </a>
+<td> <a href="Borgust.jpg"> <img src="Borgust0.jpg"> </a>
+<tr><td> <a href="kaban.jpg"> Гора Кабан </a>
+<td> <a href="uscelie.jpg"> Березовское ущелье </a>
+<td> <a href="kurgan.jpg"> Курган Красивый (за посёлком Неженский) </a>
+<td> <a href="Niklob.jpg"> Гора Никитин Лоб (выше кисловодского автовокзала) </a>
+<td> <a href="Arhyz.jpg"> Архыз, храм Спаса Нерукотворного </a>
+<td> <a href="Kremush.jpg"> Вид на Кремушинскую балку </a> (на отроге Боргустанского хребта)
+<td> <a href="Borgust.jpg"> Вид на Боргустанские горы </a>
+</table>
+<br>
+<a href="parad.jpg"> <img src="parad0.jpg" title="Парад победы"> </a> <br>
+<a href="cvety.jpg"> <img src="cvety0.jpg" title="Композиция с цветами"> </a> <br>
+<a href="Travk.jpg"> <img src="Travk0.jpg" alt="Алексей Травкин"> </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

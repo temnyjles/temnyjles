@@ -1,0 +1,60 @@
+<div class="left">
+<h3> Сайт журнала <br> "Тёмный лес" </h3>
+<h6> temnyjles.ru </h6>
+<!--#if expr="$DOCUMENT_URI != '/index.shtml'"-->
+<p><a href="index.shtml"> Главная страница </a>
+<p> &nbsp;
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/TL.shtml'"-->
+<p><a href="TL.shtml"> Номера "Тёмного леса" </a>
+<!--#endif-->
+<p><a href="autors/Nasim0.shtml"> Страницы Юрия Насимовича </a>
+<!--#if expr="$DOCUMENT_URI != '/au.shtml'"-->
+<p><a href="au.shtml"> Страницы авторов "Тёмного леса" </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/dr.shtml'"-->
+<p><a href="dr.shtml"> Страницы наших друзей </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/Kis.shtml'"-->
+<p> <a href="Kis.shtml"> Литературный Кисловодск и окрестности </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/pochta.shtml'"-->
+<p><a href="pochta.shtml"> Из нашей почты </a>
+<!--#endif-->
+<p> &nbsp;
+<!--#if expr="$DOCUMENT_URI != '/news.shtml'"-->
+<p><a href="news.shtml"> Новости сайта </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/map.shtml'"-->
+<p><a href="map.shtml"> Карта сайта </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/1.shtml'"-->
+<p><a href="1.shtml"> Тематический каталог сайта </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/obzor.shtml'"-->
+<p><a href="obzor.shtml"> Обзор сайта </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/links.shtml'"-->
+<p><a href="links.shtml"> Ссылки </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/eng.shtml'"-->
+<p><a href="eng.shtml"> На английском языке </a>
+<!--#endif-->
+<p> &nbsp;
+<p><a href="mailto:temnyjles@narod.ru"> Пишите нам! </a> temnyjles@narod.ru
+<p><a href="https://www.facebook.com/temnyjles"> "Темный лес" на Фейсбуке </a>
+</div>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(57058072, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+   });
+</script>
+<!-- /Yandex.Metrika counter -->

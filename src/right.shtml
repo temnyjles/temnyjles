@@ -1,0 +1,35 @@
+<div class="right">
+<p> &nbsp;
+<!--#if expr="$DOCUMENT_URI != '/index.shtml'"-->
+<p><a href="index.shtml"> Главная страница </a>
+<p> &nbsp;
+<!--#endif-->
+<p> &nbsp;
+<h3> На сайте "Тёмного леса": </h3>
+<!--#if expr="$DOCUMENT_URI != '/1.shtml'"-->
+<h6> (<a href="1.shtml">Тематический каталог</a>) </h6>
+<!--#else-->
+<h6> (Тематический каталог) </h6>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/S.shtml'"-->
+<p><a href="S.shtml"> Стихи </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/P.shtml'"-->
+<p><a href="P.shtml"> Проза </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/D.shtml'"-->
+<p><a href="D.shtml"> Драматургия </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/K.shtml'"-->
+<p><a href="K.shtml"> История, география, краеведение </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/E.shtml'"-->
+<p><a href="E.shtml"> Естествознание и философия </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/M.shtml'"-->
+<p><a href="M.shtml"> Песни и романсы </a>
+<!--#endif-->
+<!--#if expr="$DOCUMENT_URI != '/F.shtml'"-->
+<p><a href="F.shtml"> Фотографии и рисунки </a>
+<!--#endif-->
+</div>

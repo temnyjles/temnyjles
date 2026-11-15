@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Природные объекты Северо-Западного округа Москвы </title>
+<meta name="keywords" content="краеведение, Москва">
+<meta name="description" content="Описание природных объектов Северо-Западного округа Москвы">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Природные объекты Северо-Западного округа Москвы </h1>
+<h6> История и топонимика, <br>
+общее описание природы </h6>
+<p><a href="/SZAO/Mnevn.shtml"> Ю.А.Насимович. Мнёвниковская "пойма" реки Москвы </a>
+<p><a href="/SZAO/Pokr-Str.shtml"> Ю.А.Насимович, И.М.Аверченков, Д.А.Медведева. Покровское-Стрешнево </a>
+<p><a href="/SZAO/Kar-ber.shtml"> И.М.Аверченков, Ю.А.Насимович. Карамышевский берег реки Москвы и канала Карамышевское Спрямление </a>
+<p><a href="/SZAO/Himka.shtml"> Ю.А.Насимович, И.М.Аверченков, Д.А.Медведева. Низовье Химки и тушинский берег близ авиаполя </a>
+<p><a href="/SZAO/Himk-vod.shtml"> Ю.А.Насимович, Д.А.Медведева. Тушинский берег Химкинского водохранилища (парк "Северное Тушино") </a>
+<p><a href="/SZAO/Bratovka.shtml"> Ю.А.Насимович. Долина реки Братовки ниже Алёшкинского леса </a>
+<p><a href="/SZAO/Bratcevo.shtml"> Ю.А.Насимович, И.М.Аверченков, Л.А.Дейстфельдт. Братцево </a>
+<p><a href="/SZAO/Aleshk.shtml"> И.М.Аверченков, Д.А.Медведева, Ю.А.Насимович. Алёшкинский лес </a>
+<p><a href="/SZAO/Tush-ch.shtml"> Ю.А.Насимович, П.И.Карпов, Д.А.Медведева, В.И.Савельев, К.Ю.Теплов, А.А.Шулаков. Тушинская Чаша </a>
+<p><a href="/SZAO/Shuk-ber.shtml"> Ю.А.Насимович, И.М.Аверченков, Д.А.Медведева. Щукинский берег реки Москвы </a>
+<p><a href="/SZAO/Rublevo.shtml"> Ю.А.Насимович. Природа на территории оздоровительного комплекса "Рублёво" </a>
+<p><a href="/SZAO/Tushino.shtml"> Ю.А.Насимович. Природа московской местности Тушино </a>
+<p><a href="/Gar/Tushino.shtml"> М.М.Гар. Тушино </a> (фотоальбом)
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

@@ -1,0 +1,5 @@
+body {font-family: Calibri, sans-serif; margin: auto 22.5%}
+p {text-align: justify}
+h1, h2, h3, h4, h5, h6 {font-family: Candara, sans-serif}
+div.left {width:20%; height:100%; position:fixed; top:0; left:0; padding: 0.5em; color:#101800; background-color:#c0f0a0; font-family:Arial,sans-serif; font-size:80%}
+div.right {width:20%; height:100%; position:fixed; top:0; right:0; padding: 0.5em; color:#101800; background-color:#c0f0a0; font-family:Arial,sans-serif; font-size:80%}

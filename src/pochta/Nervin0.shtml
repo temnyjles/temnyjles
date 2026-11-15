@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Страница Валентина Нервина </title>
+<meta name="keywords" content="стихи">
+<meta name="description" content="Стихи Воронежского поэта Валентина Нервина.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Валентин Нервин </h1>
+<a href="Nervin1.jpg"> <img src="Nervin1l.jpg" alt="Валентин Нервин"> </a>
+<p><a href="/pochta/Nervin.shtml"> Над ржавой землей </a> (стихи)
+<p><a href="/pochta/Azovs.shtml"> Азовский блокнот </a> (стихи)
+<p><a href="/pochta/paska.shtml"> Пасхальные дни </a> (стихи)
+<p><a href="/pochta/god.shtml"> Когда завершается год </a> (цикл стихотворений)
+<p><a href="/pochta/letnie.shtml"> Летние песни </a> (стихи)
+<p><a href="/pochta/roditeli.shtml"> 3 стихотворения памяти родителей </a>
+<p><a href="/pochta/Vysocki.shtml"> 4 стихотворения памяти Владимира Высоцкого </a>
+<p><a href="/pochta/4stih.shtml"> 4 стихотворения памяти Венедикта Ерофеева </a>
+<p><a href="/pochta/bifsht.shtml"> Баллада о бифштексе </a>
+<p><a href="/pochta/Nervin1.shtml"> "Блудный пес неправильной породы..." </a>
+<p> &nbsp;
+<p><a href="http://www.zhurmir.ru/avtor/nervin-valentin"> Страница Валентина Нервина на сайте "Журнальный мир" </a>
+<p><a href="Nervin2.jpg"> <img src="Nervin2l.jpg" alt="Валентин Нервин"> </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

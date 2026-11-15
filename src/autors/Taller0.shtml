@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Страница Ольги Таллер </title>
+<meta name="keywords" content="стихи, акварели, рисунки">
+<meta name="description" content="Стихи и акварели Ольги Таллер">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<img src="Taller1.jpg" alt="Ольга Таллер" title="Ольга Таллер">
+<h1> Ольга Таллер </h1>
+<p><a href="/Taller/Taller.shtml"> Стихи </a>
+<p><a href="/Taller/izbranoe.shtml"> Избранные стихи </a>
+<p><a href="/Taller/venki.shtml"> Венки сонетов </a>
+<h5> ПОЭМЫ </h5>
+<p><a href="/Taller/Gesiod.shtml"> От Гесиода и Овидия </a>
+<p><a href="/Taller/domnaoz.shtml"> Дом на озере </a>
+<p><a href="/Taller/mozaika.shtml"> Мозаика 2011 </a>
+<p><a href="/Taller/obliki.shtml"> Облики-состояния </a>
+<p><a href="/Taller/arhit.shtml"> Архит </a>
+<p> &nbsp;
+<p><a href="/Taller/rasskaz.shtml"> По мотивам устного рассказа Юрия Андреевича </a>
+<h5> Фотографии и рисунки </h5>
+<p><a href="/Taller/risunki.shtml"> Фотографии и рисунки </a>
+<p><a href="/Taller/akwareli.shtml"> Акварели- стр.1 </a>
+<p><a href="/Taller/akvareli.shtml"> Акварели - стр.2 </a>
+<p><a href="/Taller/ak.shtml"> Акварели - стр.3 </a>
+<p><a href="/Taller/ak2020.shtml"> Акварели - стр.4 </a>
+<p><a href="/Taller/akvar.shtml"> Акварели - стр.5 </a>
+<p><a href="/Taller/Moskva.shtml"> Фотографии Москвы </a>
+<p> <hr>
+<p><a href="http://stihi.ru/avtor/talleros"> Страница Ольги Таллер на stihi.ru </a>
+<p><a href="http://proza.ru/avtor/talleros"> Страница Ольги Таллер на proza.ru </a>
+<p><a href="https://www.facebook.com/OljaTaller"> Страница Ольги Таллер на Фейсбуке </a>
+<p><a href="http://talleros.livejournal.com"> Блог Ольги Таллер в Живом Журнале </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

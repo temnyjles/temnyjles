@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> естествознание, философия </title>
+<meta name="keywords" content="натурфилософия, космология, антропология, психология, религия">
+<meta name="description" content="Книги и статьи Ю.Насимовича, И.Миклашевского, А.Назаретяна, Р.Пименова, Н.Шемановой">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> ЕСТЕСТВОЗНАНИЕ И ФИЛОСОФИЯ <br> на сайте temnyjles.ru </h1>
+<p><a href="/autors/nature.shtml"> Книги Юрия Насимовича по естественным наукам и натурфилософии </a>
+<p><a href="/dr/Akop.shtml"> Страница Акопа Назаретяна </a>
+<p><a href="/dr/Panov.shtml"> Страница Александра Панова </a>
+<p><a href="/dr/Pimenov.shtml"> Страница Револьта Пименова </a>
+<p><a href="/dr/Natasha.shtml"> Страница Натальи Шемановой </a>
+<p><a href="/autors/Ilja.shtml"> Страница Ильи Миклашевского </a>
+<p><a href="dr/IIR0.shtml"> Страница Игоря Ивановича Рокитянского </a>
+<p><a href="/pochta/haos.shtml"> Владимир Спиртус. На кромке хаоса: землетрясения и войны </a> (эссе)
+<p> <hr>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

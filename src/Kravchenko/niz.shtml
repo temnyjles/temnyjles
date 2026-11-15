@@ -1,0 +1,11 @@
+<a href="/index.shtml"> Главная страница </a> <br>
+<a href="/P.shtml"> Проза на сайте </a> <br>
+<a href="/Kis.shtml"> Литературный Кисловодск и окрестности </a> <br>
+<a href="/KMV/litkis.shtml"> Страница "Литературного Кисловодска" </a> <br>
+<a href="/KMV/litkis1.shtml"> Страницы авторов "ЛК" </a> <br>
+<!--#config timefmt="%e %b %Y"-->
+<p> <small> Последнее изменение страницы <!--#echo var="LAST_MODIFIED"--> </small>
+<p> &nbsp;
+<h5> ПОДЕЛИТЬСЯ: </h5>
+<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script><div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="small"
+data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir" data-yashareTheme="counter"></div>

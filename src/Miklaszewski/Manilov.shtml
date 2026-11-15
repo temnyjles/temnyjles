@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Страница Фемистокла Манилова </title>
+<meta name="keywords" content="проза, философия">
+<meta name="description" content="Ф.Манилов. 'Майя', 'Вася плюс Таня', 'Алиса в подземелье', 'Экзопланеты', 'Всё относительно', 'Тайны часов и календаря', миниатюры, проекты улучшения мира.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Фемистокл Манилов </h1>
+<p><a href="/Manilov/maja.shtml"> Майя </a> (маленький рассказ)
+<p><a href="/Manilov/VT.shtml"> Вася плюс Таня </a> (рассказ)
+<p><a href="/Manilov/Alisa.shtml"> Алиса в подземелье </a> (рассказ)
+<p><a href="/Manilov/sosed.shtml"> Сумасшедший сосед </a> (маленький рассказ)
+<p><a href="/Manilov/proekty.shtml"> Проекты улучшения мира </a>
+<p><a href="/Manilov/chasy.shtml"> Тайны часов и календаря </a> (научно-популярная статья)
+<p><a href="/Manilov/otnosit.shtml"> Всё относительно </a> (научно-популярная статья)
+<p><a href="/Manilov/ekzo.shtml"> Экзопланеты </a> (научно-популярная статья)
+<p><a href="/Manilov/mini.shtml"> Прозаические миниатюры </a>
+<p><a href="/Manilov/elkn.shtml"> Книга бумажная и книга электронная </a> (заметка)
+<p><a href="/Manilov/duhmanam.shtml"> Обращение к духоманам </a>
+<p> &nbsp;
+<p><a href="http://proza.ru/avtor/femistoclus"> Страница Фемистокла Манилова на proza.ru </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

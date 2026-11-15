@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Галина Дицман </title>
+<meta name="keywords" content="бардовские песни, стихи, проза, драматургия">
+<meta name="description" content="Песни, стихи и проза Галины Дицман">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> страница Галины Дицман </h1>
+<p><a href="/Dicman/MP3.shtml"> Песни Галины Дицман </a> (в формате mp3)
+<p><a href="/Dicman/pesni.shtml"> Тексты песен Галины Дицман </a>
+<p><a href="/Dicman/drstih.shtml"> Другие стихи Галины Дицман </a>
+<p><a href="/Dicman/pritcha.shtml"> Галина Дицман. Притча на краю света </a> (пьеса)
+<p><a href="/Dicman/PDF.shtml"> Проза Галины Дицман </a> (в формате pdf)
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

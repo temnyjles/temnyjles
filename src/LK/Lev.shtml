@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Лев Израилевич Кропоткин </title>
+<meta name="keywords" content="стихи">
+<meta name="description" content="Стихи и рецензии Льва Кропоткина.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<a href="/LK/Krop.jpg"> <img src="/LK/Krop0.jpj" alt="Лев Кропоткин"> </a>
+<h1> Лев Кропоткин </h1>
+<h6> Москва </h6>
+<h6> член СПР, <br> доктор технических наук </h6>
+<p><a href="/LK/Krop.shtml"> Стихи </a> опубликованные в "Литературном Кисловодске"
+<p><a href="/LK/Kropotkn.shtml"> Киевское трио </a> (поэма)
+<p><a href="/LK/Krop1.shtml"> Козерог и скорпион </a> (поэма)
+<p><a href="/LK/litkis-L.shtml"> О "Литературном Кисловодске" N29-30, N34, N35 </a>
+<p><a href="/Podolskij/strana0.shtml"> Заметки на полях </a> (О книге стихотворений Станислава Подольского "Нагорная страна")
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

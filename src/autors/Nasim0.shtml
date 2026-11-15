@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Юрий Андреевич Насимович </title>
+<meta name="keywords" content="стихи, краеведение, натурфилософия, мемуары">
+<meta name="description" content="Книги, статьи и стихи Ю.А.Насимовича.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<a href="Nasim1.jpg"> <img src="Nasim1l.jpg" alt="Юрий Насимович"> </a> &nbsp; &nbsp;
+<a href="Nasim2.jpg"> <img src="Nasim2l.jpg" alt="Юрий Насимович"> </a> <br>
+<h1> Юрий Андреевич Насимович </h1>
+<h6> (1953 - 2026) </h6>
+<p> Юрий Насимович. <a href="/autors/Nasim.shtml"> Стихи </a>
+<p> Юрий Насимович. <a href="/autors/didakt.shtml"> Дидактические стихи </a>
+<p> Юрий Насимович. <a href="/autors/nature.shtml"> Книги и статьи по естественным наукам и натурфилософии </a>
+<p> Юрий Насимович и др. <a href="/autors/kraeved.shtml"> Книги и статьи по естественнонаучному краеведению </a>
+<p> Юрий Насимович. <a href="/autors/vospom.shtml"> Воспоминания </a>
+<p> <a href="/autors/stranica.shtml"> Страница памяти Юрия Насимовича </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

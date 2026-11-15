@@ -1,0 +1,10 @@
+<a href="/index.shtml"> Главная страница </a> сайта <br>
+<a href="/P.shtml"> Проза </a> на сайте temnyjles.ru <br>
+<a href="/dr.shtml"> Страницы наших друзей </a> <br>
+<p> &nbsp;
+<!--#config timefmt="%e %b %Y"-->
+<p> <small> Последнее изменение страницы <!--#echo var="LAST_MODIFIED"--> </small>
+<p> &nbsp; <br>
+<h5> ПОДЕЛИТЬСЯ: </h5>
+<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script><div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="small"
+data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir" data-yashareTheme="counter"></div>

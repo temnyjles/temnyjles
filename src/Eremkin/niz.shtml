@@ -1,0 +1,11 @@
+<p><a href="/index.shtml"> Главная страница </a> сайта
+<p><a href="/dr.shtml"> Страницы друзей "Темного леса" </a>
+<p><a href="/K.shtml"> Краеведение на сайте "Темного леса" </a>
+<p><a href="/autors/kraeved.shtml"> Юрий Насимович и др. </a> Книги и статьи по естественнонаучному краеведению
+<p> &nbsp;
+<!--#config timefmt="%e %b %Y"-->
+<p> <small> Последнее изменение страницы <!--#echo var="LAST_MODIFIED"--> </small>
+<p> &nbsp;
+<h5> ПОДЕЛИТЬСЯ: </h5>
+<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script><div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="small"
+data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir" data-yashareTheme="counter"></div>

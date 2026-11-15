@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Акварели Ольги Таллер </title>
+<meta name="keywords" content="акварели">
+<meta name="description" content="Акварели Ольги Таллер.">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> АКВАРЕЛИ ОЛЬГИ ТАЛЛЕР </h1>
+<a href="akvar01.jpg"> <img src="akvar01l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar02.jpg"> <img src="akvar02l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar03.jpg"> <img src="akvar03l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar04.jpg"> <img src="akvar04l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar05.jpg"> <img src="akvar05l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar06.jpg"> <img src="akvar06l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar07.jpg"> <img src="akvar07l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar08.jpg"> <img src="akvar08l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar09.jpg"> <img src="akvar09l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+<a href="akvar10.jpg"> <img src="akvar10l.jpg" style="padding:3em" alt="акварель Ольги Таллер"> </a>
+
+<br> <br>
+<h5> Другие акварели Ольги Таллер </h5>
+<a href="akwareli.shtml"> Стр. 1 </a> <br>
+<a href="akvareli.shtml"> Стр. 2 </a> <br>
+<a href="ak.shtml"> Стр. 3 </a> <br>
+<a href="akvar.shtml"> Акварели Ольги Таллер- стр.5 </a> <br>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

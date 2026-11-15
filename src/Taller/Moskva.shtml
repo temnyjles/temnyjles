@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> Фотографии Москвы </title>
+<meta name="keywords" content="фотографии">
+<meta name="description" content="Фотографии Москвы">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> Ольга Таллер </h1>
+<h1> Улицы, воды и небо Москвы </h1>
+<table cellspacing="10">
+<tr><td> <a href="/Taller/Mos01.jpg"> <img src="/Taller/Mos01l.jpg"> </a> <td> Большая Садовая, заход солнца
+<tr><td> <a href="/Taller/Mos02.jpg"> <img src="/Taller/Mos02l.jpg"> </a> <td> Вид с пл. Маяковского на Большую Садовую
+<tr><td> <a href="/Taller/Mos03.jpg"> <img src="/Taller/Mos03l.jpg"> </a> <td> Маяковский на площади Маяковского
+<tr><td> <a href="/Taller/Mos04.jpg"> <img src="/Taller/Mos04l.jpg"> </a> <td> В переулках Москвы
+<tr><td> <a href="/Taller/Mos05.jpg"> <img src="/Taller/Mos05l.jpg"> </a> <td> дом на Остоженке. Стиль модерн
+<tr><td> <a href="/Taller/Mos06.jpg"> <img src="/Taller/Mos06l.jpg"> </a> <td> дом на Остоженке. Стиль модерн
+<tr><td> <a href="/Taller/Mos07.jpg"> <img src="/Taller/Mos07l.jpg"> </a> <td> Москва-Сити ночью
+<tr><td> <a href="/Taller/Mos08.jpg"> <img src="/Taller/Mos08l.jpg"> </a> <td> Москва-Сити, туман
+</table>
+<p><a href="https://www.facebook.com/OljaTaller/media_set?set=a.731380573544793.1073741854.100000185709190&type=3"> Эти и другие фотографии Москвы на Фейсбуке </a>
+<p> &nbsp; <br>
+<!--#include file="niz.shtml"-->
+</body>
+</html>

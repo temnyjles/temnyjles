@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> песни и романсы</title>
+<meta name="keywords" content="песни, романсы, стихи, поэзия">
+<meta name="description" content="Поют Г.Дицман, М.Чегодаев, А.Лаврешников, В.Доброжанская, Т.Рубанская">
+<link rel="stylesheet" href="/temnyjles.css" type="text/css">
+</head>
+<body>
+<!--#include file="left.shtml"-->
+<!--#include file="right.shtml"-->
+<h1> ПЕСНИ И РОМАНСЫ <br> на сайте temnyjles.ru </h1>
+<h6> (в формате mp3) </h6>
+<p><a href="/Dicman/MP3.shtml"> Песни Галины Дицман </a>
+<p><a href="/autors/Cheg.shtml"> Песни Михаила Чегодаева </a>
+<p><a href="/dr/Tania.shtml"> Поет Татьяна Рубанская </a>
+<p><a href="/dr/Viktoria.shtml"> Песни Виктории Доброжанской </a> на стихи поэтов Серебряного века
+<p><a href="/MIRALAN/romansy.shtml"> Программа "Русский романс" </a> (поет Андрей Лаврешников)
+<p><a href="/MIRALAN/fonari.shtml"> Программа "Когда зажгутся фонари" </a> (поет Андрей Лаврешников)
+<p><a href="/MIRALAN/z2016.shtml"> Программа "Счастье моё" </a> (поет Андрей Лаврешников)
+<p><a href="/Ovcynova/Sovpaden.shtml"> Дуэт "Совпадение" </a> (Лариса Овцынова и Геннадий Карцев) - музыкально-поэтические композиции
+<p><a href="/dr/Karcev.shtml"> Поёт Геннадий Карцев </a>
+<p><a href="/Fattah/mp3.shtml"> Музыка Азона Фаттаха </a>
+<p> <hr>
+<!--#include file="niz.shtml"-->
+</body>
+</html>
