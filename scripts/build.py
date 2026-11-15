@@ -1,23 +1,14 @@
 
 from pathlib import Path
-from urllib.parse import urlsplit, urlunsplit
 import re
 import shutil
 
 SOURCE = Path("src")
 OUTPUT = Path("dist")
 
+# SSI include directive.
 include_re = re.compile(
-    r'<!--#include\s+file="([^"]+)"\s*-->'
-)
-
-# HTML attributes that may contain internal file references.
-url_re = re.compile(
-    r'(?P<prefix>\b(?:href|src|action|poster)\s*=\s*)'
-    r'(?P<quote>["\'])'
-    r'(?P<url>.*?)'
-    r'(?P=quote)',
-    re.IGNORECASE
+    r'<!--#include\s+file="([^"]+)"\s+\*-->'
 )
 
 
@@ -55,43 +46,11 @@ def process(path, stack=()):
     return include_re.sub(replace, content)
 
 
-def normalize_links(content):
-    """Convert local .shtml URLs to .html URLs."""
-
-    def replace(match):
-        url = match.group("url")
-
-        parts = urlsplit(url)
-
-        # Ignore external URLs, mailto:, javascript:, etc.
-        if parts.scheme or parts.netloc:
-            return match.group(0)
-
-        # Only change .shtml paths.
-        if parts.path.lower().endswith(".shtml"):
-            new_path = parts.path[:-6] + ".html"
-            url = urlunsplit((
-                parts.scheme,
-                parts.netloc,
-                new_path,
-                parts.query,
-                parts.fragment
-            ))
-
-        return (
-            match.group("prefix")
-            + match.group("quote")
-            + url
-            + match.group("quote")
-        )
-
-    return url_re.sub(replace, content)
-
-
 # Start with a clean output directory.
 if OUTPUT.exists():
     shutil.rmtree(OUTPUT)
 
+redirects = []
 
 for path in SOURCE.rglob("*"):
 
@@ -102,20 +61,40 @@ for path in SOURCE.rglob("*"):
 
     if path.suffix.lower() in (".html", ".shtml"):
 
-        target = OUTPUT / relative #.with_suffix(".html")
+        # Generate .html output from both source extensions.
+        target = OUTPUT / relative.with_suffix(".html")
         target.parent.mkdir(parents=True, exist_ok=True)
 
         content = process(path)
 
-        # Normalize internal links after SSI expansion.
-        # content = normalize_links(content)
-
         target.write_text(content, encoding="utf-8")
 
+        # Preserve old .shtml URLs with permanent redirects.
+        if path.suffix.lower() == ".shtml":
+
+            old_url = "/" + relative.as_posix()
+
+            # The homepage should redirect directly to /.
+            if relative.as_posix().lower() == "index.shtml":
+                new_url = "/"
+            else:
+                new_url = "/" + relative.with_suffix(".html").as_posix()
+
+            redirects.append(f"{old_url} {new_url} 301")
+
     else:
+        # Copy all other files unchanged.
         target = OUTPUT / relative
         target.parent.mkdir(parents=True, exist_ok=True)
 
         shutil.copy2(path, target)
 
-print("Website successfully built in dist/")
+
+# Generate Cloudflare Pages redirects.
+(OUTPUT / "_redirects").write_text(
+    "\n".join(redirects) + "\n",
+    encoding="utf-8"
+)
+
+print(f"Website successfully built in {OUTPUT}/")
+print(f"Generated {len(redirects)} redirects.")
