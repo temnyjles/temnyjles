@@ -92,7 +92,8 @@ for path in SOURCE.rglob("*"):
 
 # Generate Cloudflare Pages redirects.
 (OUTPUT / "_redirects").write_text(
-    "\n".join(redirects) + "\n",
+    "/index.shtml / 301\n"
+    "/*.shtml /:splat.html 301\n",
     encoding="utf-8"
 )
 
