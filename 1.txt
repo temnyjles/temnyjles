@@ -1,0 +1,85 @@
+
+PAGE: /
+  Visible text differs:
+    delete:
+      OLD: 'Темный Лес Сайт журнала "Тёмный лес" temnyjles.ru Главная страница Номера "Тёмного леса" Страницы Юрия Насимовича Ст'
+      NEW: 'Темный Лес Сайт журнала "Тёмный лес" temnyjles.ru Номера "Тёмного леса" Страницы Юрия Насимовича Ст'
+    delete:
+      OLD: 'е нам! temnyjles@narod.ru "Темный лес" на Фейсбуке Главная страница На сайте "Тёмного леса": (Тематический каталог) С'
+      NEW: 'е нам! temnyjles@narod.ru "Темный лес" на Фейсбуке На сайте "Тёмного леса": (Тематический каталог) С'
+    delete:
+      OLD: '- Илья Миклашевский. Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: '- Илья Миклашевский. Последнее изменение страницы ПОДЕЛИТЬСЯ:'
+  Link differences:
+    OLD ONLY: /favicon.png
+    OLD ONLY: /index.html
+    NEW ONLY: http://temnyjles.ru/favicon.png
+
+PAGE: /dr/AL.html
+  Canonical NEW URL unexpectedly redirects: HTTP 301 -> https://temnyjles.roman-79c.workers.dev/dr/AL.html
+  Legacy redirect: Wrong redirect destination: /dr/AL.html (expected /dr/AL.shtml)
+  Legacy redirect: Final URL is /dr/AL.html, expected /dr/AL.shtml
+  Visible text differs:
+    delete:
+      OLD: 'траницы наших друзей Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: 'траницы наших друзей Последнее изменение страницы ПОДЕЛИТЬСЯ:'
+
+PAGE: /news.html
+  Canonical NEW URL unexpectedly redirects: HTTP 301 -> https://temnyjles.roman-79c.workers.dev/news.html
+  Legacy redirect: Wrong redirect destination: /news.html (expected /news.shtml)
+  Legacy redirect: Final URL is /news.html, expected /news.shtml
+  Visible text differs:
+    delete:
+      OLD: 'тературный Кисловодск и окрестности Из нашей почты Новости сайта Карта сайта Тематический каталог сайта Обзор сайт'
+      NEW: 'тературный Кисловодск и окрестности Из нашей почты Карта сайта Тематический каталог сайта Обзор сайт'
+    delete:
+      OLD: 'сайта "Тёмного леса" Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: 'сайта "Тёмного леса" Последнее изменение страницы ПОДЕЛИТЬСЯ:'
+  Link differences:
+    NEW ONLY: http://temnyjles.ru/LK/stihi.shtml
+
+PAGE: /K.html
+  Canonical NEW URL unexpectedly redirects: HTTP 301 -> https://temnyjles.roman-79c.workers.dev/K.html
+  Legacy redirect: Wrong redirect destination: /K.html (expected /K.shtml)
+  Legacy redirect: Final URL is /K.html, expected /K.shtml
+  Visible text differs:
+    delete:
+      OLD: 'а": (Тематический каталог) Стихи Проза Драматургия История, география, краеведение Естествознание и философия Песни и романсы Фотогр'
+      NEW: 'а": (Тематический каталог) Стихи Проза Драматургия Естествознание и философия Песни и романсы Фотогр'
+    delete:
+      OLD: 'дом деревни Ипатовки Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: 'дом деревни Ипатовки Последнее изменение страницы ПОДЕЛИТЬСЯ:'
+  Link differences:
+    OLD ONLY: /K.html
+
+PAGE: /dr/Akop.html
+  Canonical NEW URL unexpectedly redirects: HTTP 301 -> https://temnyjles.roman-79c.workers.dev/dr/Akop.html
+  Legacy redirect: Wrong redirect destination: /dr/Akop.html (expected /dr/Akop.shtml)
+  Legacy redirect: Final URL is /dr/Akop.html, expected /dr/Akop.shtml
+  Visible text differs:
+    delete:
+      OLD: 'траницы наших друзей Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: 'траницы наших друзей Последнее изменение страницы ПОДЕЛИТЬСЯ:'
+
+PAGE: /D.html
+  Canonical NEW URL unexpectedly redirects: HTTP 301 -> https://temnyjles.roman-79c.workers.dev/D.html
+  Legacy redirect: Wrong redirect destination: /D.html (expected /D.shtml)
+  Legacy redirect: Final URL is /D.html, expected /D.shtml
+  Visible text differs:
+    delete:
+      OLD: '"Тёмного леса": (Тематический каталог) Стихи Проза Драматургия История, география, краеведение Естествознание и '
+      NEW: '"Тёмного леса": (Тематический каталог) Стихи Проза История, география, краеведение Естествознание и '
+    delete:
+      OLD: 'мана Шолом-Алейхема) Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: 'мана Шолом-Алейхема) Последнее изменение страницы ПОДЕЛИТЬСЯ:'
+  Link differences:
+    OLD ONLY: /D.html
+
+PAGE: /autors/Dicman.html
+  Canonical NEW URL unexpectedly redirects: HTTP 301 -> https://temnyjles.roman-79c.workers.dev/autors/Dicman.html
+  Legacy redirect: Wrong redirect destination: /autors/Dicman.html (expected /autors/Dicman.shtml)
+  Legacy redirect: Final URL is /autors/Dicman.html, expected /autors/Dicman.shtml
+  Visible text differs:
+    delete:
+      OLD: 'цман (в формате pdf) Последнее изменение страницы (none) ПОДЕЛИТЬСЯ:'
+      NEW: 'цман (в формате pdf) Последнее изменение страницы ПОДЕЛИТЬСЯ:'
