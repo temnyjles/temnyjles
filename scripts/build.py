@@ -248,6 +248,7 @@ for path in SOURCE.rglob("*"):
 # ============================================================
 
 (OUTPUT / "_redirects").write_text(
+    "/ /index.html 200\n"
     "/index.shtml / 301\n"
     "/*.shtml /:splat.html 301\n",
     encoding="utf-8"
